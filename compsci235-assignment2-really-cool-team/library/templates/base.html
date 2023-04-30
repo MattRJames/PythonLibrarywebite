@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'self'; img-src 'self' https://s.gr-assets.com https://images.gr-assets.com;">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('books.home') }}">
+        <img class="icon float-left" width="40" height="32" src="{{ url_for('static', filename='logo.png') }}">
+    </a>
+    <a class="nav-item" href="{{ url_for('books.home') }}">Home</a>
+    <a class="nav-item" href="{{ url_for('books.browse') }}">Browse</a>
+    <a class="nav-item" href="{{ url_for('books.search') }}">Advanced search</a>
+    <div class="float-right">
+    {% if logged_in %}
+      <a class="nav-item" href="{{ url_for('users.profile') }}">Profile</a>
+      <a class="nav-item" href="{{ url_for('users.logout') }}">Logout</a>
+    {% else %}
+      <a class="nav-item" href="{{ url_for('users.login') }}">Login</a>
+    {% endif %}
+    </div>
+  </nav>
+  <main>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+    <div id="container">
+      {% block content %}{% endblock %}
+      {% include "editors_picks.html" %}
+    </div>
+  </main>
+</body>
+</html>

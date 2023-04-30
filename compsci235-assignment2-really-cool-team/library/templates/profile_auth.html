@@ -1,0 +1,6 @@
+{% extends 'profile.html' %}
+{% block auth %}
+<div id="primary">
+<div><a href="{{ url_for('users.change_password') }}">Change your password</a></div>
+</div>
+{% endblock %}

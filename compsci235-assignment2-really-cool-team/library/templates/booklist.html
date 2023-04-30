@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Browse - Library Knihovna{% endblock %}
+{% block content %}
+<div id="primary">
+<header>Browse</header>
+<div>Page {{ current_page }} of {{ pages['total'] }}</div>
+<ul class="booklist">
+  {% for book in books %}
+    <li>
+      <a href="{{ url_for('books.book_page', id=book.book_id) }}">
+        <div class="image-border">
+          <img class="block-center" src="{{ book.get_image() }}">
+        </div>
+      </a>
+      <div class="booklist-details">
+        <h3><a href="{{ url_for('books.book_page', id=book.book_id) }}">{{ book.title }}</a></h3>
+        <div>by
+          {% for author in book.authors %}
+            <a class="book-details" href="{{ url_for('books.browse', author_id=author.unique_id) }}">{{ author.full_name }}</a>{% if not loop.last %},{% endif %}
+          {% endfor %}
+        </div>
+        <div>
+          {% if book.release_year %}<a class="book-details" href="{{ url_for('books.browse', release_year=book.release_year) }}">{{ book.release_year }}</a>{% else %}<small>unkown year</small>{% endif %}
+          &sdot;
+          {% if book.publisher.name != 'N/A' %}<a class="book-details" href="{{ url_for('books.browse', publisher_name=book.publisher.name) }}">{{ book.publisher.name }}</a>{% else %}<small>unknown publisher</small>{% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+<div class="flex">
+  <div>
+  {% with page = pages['first'] %}
+    {% if page %}<a href="{{ page_url(page) }}">{% endif %}<div class="page-link">First page</div>{% if page %}</a>{% endif %}
+  {% endwith %}
+  {% with page = pages['previous'] %}
+    {% if page %}<a href="{{ page_url(page) }}">{% endif %}<div class="page-link">Previous page</div>{% if page %}</a>{% endif %}
+  {% endwith %}
+  </div>
+  <div class="block-right">
+  {% with page = pages['next'] %}
+    {% if page %}<a href="{{ page_url(page) }}">{% endif %}<div class="page-link">Next page</div>{% if page %}</a>{% endif %}
+  {% endwith %}
+  {% with page = pages['last'] %}
+    {% if page %}<a href="{{ page_url(page) }}">{% endif %}<div class="page-link">Last page</div>{% if page %}</a>{% endif %}
+  {% endwith %}
+  </div>
+</div>
+  </div>
+{% endblock %}

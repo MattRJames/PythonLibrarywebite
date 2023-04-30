@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ user.user_name }}'s profile - Library Knihovna{% endblock %}
+{% block content %}
+<div id="primary">
+<header>{{ user.user_name }}'s profile</header>
+<section>
+{% block auth %}{% endblock %}
+</section>
+<section>
+<h3>Reviews</h3>
+{% for review in reviews %}
+  {% with show_book = True %}
+    {% include 'review.html' %}
+  {% endwith %}
+{% endfor %}
+</section>
+</div>
+{% endblock %}

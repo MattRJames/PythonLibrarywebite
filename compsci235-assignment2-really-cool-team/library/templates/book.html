@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }} - Library Knihovna{% endblock %}
+{% block content %}
+<div id="primary">
+<div class="flex">
+  <article>
+    <div class="book-aside">
+      <div class="image-border image-container float-none">
+        <img class="block-center" src="{{ book.get_image() }}">
+      </div>
+      <div class="external-links">
+        <h4>On other sites:</h4>
+        <div class="external-link">
+          <a target="_blank" href="https://openlibrary.org/search?{% if book.isbn %}isbn={{ book.isbn }}{% else %}title={{ book.title }}{% if book.authors %}&author={{ book.authors|map(attribute='full_name')|join(' OR ') }}{% endif %}{% endif %}">
+            <img src="{{ url_for('static', filename='openlibrary.png') }}" width="30" height="30"><span>Open Library</span>
+          </a>
+        </div>
+        <div class="external-link">
+        {# Non-fiction search
+          <a target="_blank" href="https://libgen.fun/search.php?{% if book.isbn %}req={{ book.isbn }}&column=identifier{% else %}req={{ book.title }}{% if book.authors %} - {{ book.authors|map(attribute='full_name')|join(', ') }}{% endif %}{% endif %}"> #}
+          <a target="_blank" href="https://libgen.fun/foreignfiction/index.php?s={{ book.title }}{% if book.authors %} - {{ book.authors|map(attribute='full_name')|join(', ') }}{% endif %}">
+            <img src="{{ url_for('static', filename='libgen.svg') }}" width="30" height="30"><span>Library Genesis</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <h2 class='book-title'>{{ book.title }}</h2>
+    <p>by
+      {% for author in book.authors %}
+        <a class="book-details" href="{{ url_for('books.browse', author_id=author.unique_id) }}">{{ author.full_name }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </p>
+    <p>
+        <a class="book-details" href="{{ url_for('books.browse', release_year=book.release_year) }}">{{ book.release_year }}</a>
+        &sdot;
+        <a class="book-details" href="{{ url_for('books.browse', publisher_name=book.publisher.name) }}">{{ book.publisher.name }}</a>
+    </p>
+    <blockquote>{{ book.description }}</blockquote>
+    <hr>
+    <div class="reviews">
+      <form class="review-form" action="{{ url_for('books.book_page', id=book.book_id) }}" method="post">
+        {{ form.review_text(placeholder=form.review_text.label.text) }}
+        {{ form.hidden_tag() }}
+        <div class="flex">
+          <div>{{ form.rating.label.text }}: {{ form.rating() }}</div>
+          {{ form.submit(class='block-right') }}
+        </div>
+      </form>
+      {% for field_name in form.errors %}
+        {% for error in form.errors[field_name] %}
+          <div class="error">{{ error }}</div>
+        {% endfor %}
+      {% endfor %}
+      {% for review in reviews %}
+        {% include 'review.html' %}
+      {% endfor %}
+    </div>
+  </article>
+
+</div>
+</div>
+
+{% endblock %}

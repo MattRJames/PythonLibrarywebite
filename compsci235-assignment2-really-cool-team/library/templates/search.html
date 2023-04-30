@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Search - Library Knihovna{% endblock %}
+{% block content %}
+<div id="primary">
+<header>Search</header>
+<form class="margins" action="{{ url_for('books.search') }}" method="post">
+  <div>
+    {{ form.author_id.label() }}
+    <div>{{ form.author_id() }}</div>
+    {% for error in form.author_id.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <div>{{ form.publisher_name.label() }}</div>
+    <div>{{ form.publisher_name() }}</div>
+    {% for error in form.publisher_name.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <div>{{ form.release_year.label() }}</div>
+    <div>{{ form.release_year() }}</div>
+    {% for error in form.release_year.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+{{ form.submit() }}
+</form>
+</div>
+{% endblock %}

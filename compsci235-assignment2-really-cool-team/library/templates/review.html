@@ -1,0 +1,18 @@
+{% if show_book %}
+  <div>
+    <a class="book-details" href="{{ url_for('books.book_page', id=review.book.book_id) }}">{{ review.book.title }}</a>
+    by
+    {% for author in review.book.authors %}
+      <a class="book-details" href="{{ url_for('books.browse', author_id=author.unique_id) }}">{{ author.full_name }}</a>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+<article class="review">
+  <div class="review-meta">
+    <span><a class="username" href="{{ url_for('books.profile', user_name=review.user.user_name) }}">{{ review.user.user_name }}</a></span>
+    <span title="{{ review.rating }} star(s)">{{ '★' * review.rating }}{{ '☆' * (5 - review.rating) }}</span>
+    <span>{{ review.timestamp.strftime('%a, %d %b %Y %H:%M:%S UTC') }}</span>
+  </div>
+  <p>{{ review.review_text }}</p>
+</article>
+

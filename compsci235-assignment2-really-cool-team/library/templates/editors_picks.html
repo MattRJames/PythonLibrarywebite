@@ -1,0 +1,14 @@
+<aside id="sidebar">
+  <header>
+    <h3>Editor's picks</h3>
+  </header>
+    {% for book in selected_books %}
+      <a href="{{ url_for('books.book_page', id=book.book_id) }}" class="editors-picks">
+        <img src="{{ book.get_image() }}">
+        <p>{{ book.title }} - {{book.author}}</p>
+        <p>{% for author in book.authors %}{{ author.full_name }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+      </a>
+      <hr>
+    {% endfor %}
+  <small>Compsci 235 Assignment 3, 2021</small>
+</aside>

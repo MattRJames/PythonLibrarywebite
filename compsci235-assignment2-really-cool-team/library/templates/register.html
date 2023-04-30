@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Register - Library Knihovna{% endblock %}
+{% block content %}
+<div id="primary">
+<form class="margins" action="{{ url_for('users.register') }}" method="post">
+  <div>
+    {{ form.name.label() }}
+    <div>{{ form.name() }}</div>
+    {% for error in form.name.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    {{ form.password.label() }}
+    <div>{{ form.password() }}</div>
+    {% for error in form.password.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    {{ form.confirm_password.label() }}
+    <div>{{ form.confirm_password() }}</div>
+    {% for error in form.confirm_password.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  </div>
+  {% if form.csrf_token %}
+    {% for error in form.csrf_token.errors %}
+      <div class="error">{{ error }}</div>
+    {% endfor %}
+  {% endif %}
+  {{ form.hidden_tag() }}
+  {{ form.submit() }}
+</form>
+<div>Already have an account? <a href="{{ url_for('users.login') }}">Login</a></div>
+</div>
+{% endblock %}
